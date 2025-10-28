@@ -1,14 +1,22 @@
 var http = require('http');
 var request = require('request');
+var fs = require('fs');
 
 var request_body = undefined;
+var html_content = undefined;
 
 function createHtmlStringFromJSON(retrievedData) {
-    var html_string = '<html>\n<head>\n<title>Data aggregator</title>\n</head>\n<body>\n<table border="1">\n';
+    var body_begin_index = html_content.indexOf('<body>');
+    var body_end_index = html_content.indexOf('</body>');
+
+    var string_until_body = html_content.slice(0, body_begin_index + 6);
+    var string_from_body = html_content.slice(body_end_index);
+
+    var html_string = '<table>\n';
     html_string += '<tr>\n';
     for (var attribute in retrievedData[0]) {
         if (typeof retrievedData[0][attribute] !== 'object') {
-            html_string += "<th>" + attribute + "</th>\n";
+            html_string += "<td>" + attribute + "</td>\n";
         }
     }
     html_string += "</tr>\n";
@@ -22,8 +30,8 @@ function createHtmlStringFromJSON(retrievedData) {
         }
         html_string += "</tr>\n";
     });
-    html_string += "</table>\n</body>\n</html>";
-    return html_string;
+    html_string += "</table>";
+    return string_until_body + html_string + string_from_body;
 }
 
 // Faz a requisição inicial à API
@@ -52,3 +60,10 @@ http.createServer(function (req, res) {
         res.end("⏳ Carregando dados... Atualize em alguns segundos.");
     }
 }).listen(8080, () => console.log("🌐 Servidor rodando em http://localhost:8080"));
+
+fs.readFile('./index.html', function (err, html) {
+    if (err) {
+        throw err;
+    }
+    html_content = html;
+});
