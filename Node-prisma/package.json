@@ -1,0 +1,21 @@
+{
+  "name": "node-prisma",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prisma": "^7.4.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.4.1",
+    "@types/node": "^25.2.3",
+    "dotenv": "^17.3.1"
+  }
+}
